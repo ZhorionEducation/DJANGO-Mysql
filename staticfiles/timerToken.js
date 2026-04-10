@@ -11,9 +11,6 @@ const fetchTokenExpiration = () => {
     .then(response => response.json())
     .then(data => {
         const expirationTime = new Date(data.expiry);
-        const now = new Date();
-        const timeLeft = Math.max(0, expirationTime - now);
-        updateTimer(timeLeft);
         
         // Actualizar cada segundo
         setInterval(() => {
@@ -35,5 +32,4 @@ const updateTimer = (timeLeft) => {
     containerTimerTokenHTML.textContent = formattedTime;
 };
 
-// Ejecutar cuando carga la página
 document.addEventListener('DOMContentLoaded', fetchTokenExpiration);

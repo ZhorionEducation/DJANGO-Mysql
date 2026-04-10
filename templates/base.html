@@ -39,6 +39,9 @@
             </span>
         </div>
         <div class="nav-item">
+            Timer: <span id="timerToken">--:--</span>
+        </div>
+        <div class="nav-item">
             <a href="{% url 'tienda:dashboard' %}"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
         </div>
         <div class="nav-item">
@@ -62,5 +65,6 @@
     {% block extra_js %}{% endblock %}
     <script src="{% static 'loader.js' %}"></script>
     <script src="{% static 'navbar.js' %}"> </script>
+    <script src="{% static 'timerToken.js' %}"></script>
 </body>
 </html>
