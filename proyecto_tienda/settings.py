@@ -10,10 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# cargar el env
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -74,16 +78,15 @@ WSGI_APPLICATION = 'proyecto_tienda.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+# leer el .env
 DATABASES = {
-    # nos conectamos a mysql
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'defaultdb',
-        'USER': 'avnadmin',
-        'PASSWORD': 'AVNS_5imB7Ik3E5QV44jR009',
-        'HOST': 'mysql-387ba388-base-datos-mysql.l.aivencloud.com',
-        'PORT': '12739',
+        'NAME': os.getenv('DB_NAME', 'defaultdb'),
+        'USER': os.getenv('DB_USER', 'avnadmin'),
+        'PASSWORD': os.getenv('DB_PASSWORD'), 
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT', '12739'),
     }
 }
 
