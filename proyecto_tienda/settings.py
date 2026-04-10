@@ -27,9 +27,14 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-_zhzp_s+8*z0!ua8dq&0^*h(1mcz(smnd@tgygmkb3e^avt1bh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    'https://django-mysql-production-b67b.up.railway.app',
+    'http://localhost:8000',
+    'http://127.0.0.1',
+]
 
 
 # Application definition
