@@ -50,6 +50,8 @@
         <div class="nav-item">
             <a href="{% url 'tienda:listar_productos' %}"><i class="fa-solid fa-tags"></i> <span>Productos</span></a>
         </div>
+        <div class="nav-item">
+            Timer: <span id="timerToken">--:--</span>
         <div class="nav-item logout">
             <a href="{% url 'auth_client:logout' %}"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar Sesión</span></a>
         </div>
@@ -62,5 +64,6 @@
     {% block extra_js %}{% endblock %}
     <script src="{% static 'loader.js' %}"></script>
     <script src="{% static 'navbar.js' %}"> </script>
+    <script src="{% static 'timerToken.js' %}"></script>
 </body>
 </html>
