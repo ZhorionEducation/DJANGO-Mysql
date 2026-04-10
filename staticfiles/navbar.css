@@ -175,3 +175,83 @@ body {
         font-size: 13px;
     }
 }
+
+/* Container Expiry Alert */
+.container-expiry {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideIn 0.5s ease-out;
+}
+
+.container-expiry::before {
+    content: '⏰';
+    font-size: 20px;
+    animation: pulse 1s infinite;
+}
+
+#timerToken {
+    font-size: 18px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    min-width: 50px;
+    text-align: center;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Mostrar cuando falta poco tiempo */
+.container-expiry.show {
+    display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container-expiry {
+        top: 80px;
+        right: 10px;
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+    
+    #timerToken {
+        font-size: 16px;
+        padding: 2px 8px;
+        min-width: 45px;
+    }
+}

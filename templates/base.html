@@ -26,6 +26,9 @@
         <span></span>
         <span></span>
     </button>
+    <div class="container-expiry">
+        Tu sesión esta por expirar<span id="timerToken">--:--</span>
+    </div>
 
     <!-- NAV VERTICAL GLOBAL -->
     <div class="nav-vertical" id="navVertical">
@@ -37,9 +40,6 @@
             <span id="usuario">
                 {{ request.session.username }}
             </span>
-        </div>
-        <div class="nav-item">
-            Timer: <span id="timerToken">--:--</span>
         </div>
         <div class="nav-item">
             <a href="{% url 'tienda:dashboard' %}"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
