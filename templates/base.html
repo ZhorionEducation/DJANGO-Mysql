@@ -66,5 +66,10 @@
     <script src="{% static 'loader.js' %}"></script>
     <script src="{% static 'navbar.js' %}"> </script>
     <script src="{% static 'timerToken.js' %}"></script>
+    {% if request.session.token %}
+    <script>
+        localStorage.setItem('access_token', '{{ request.session.token }}');
+    </script>
+    {% endif %}
 </body>
 </html>
