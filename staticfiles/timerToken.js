@@ -29,7 +29,13 @@ const updateTimer = (timeLeft) => {
     const minutes = Math.floor(timeLeft / 60000);
     const seconds = Math.floor((timeLeft % 60000) / 1000);
     const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    containerTimerTokenHTML.textContent = formattedTime;
+    // si el tiempo del container es mayor a 1 minuto, ocultar el timer
+    if (timeLeft > 60000) {
+        containerTimerTokenHTML.style.display = 'none';
+    } else {
+        containerTimerTokenHTML.style.display = 'inline';
+        containerTimerTokenHTML.textContent = formattedTime;
+    }
 };
 
 document.addEventListener('DOMContentLoaded', fetchTokenExpiration);
