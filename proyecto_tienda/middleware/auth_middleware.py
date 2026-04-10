@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import redirect
 
-api_url = 'http://localhost:8001'
+api_url = 'https://web-production-6ef9e.up.railway.app'
 
 # Middleware para verificar el token en cada request
 

@@ -1,7 +1,7 @@
 import requests
 
 # aca ponemos la url de la api debido a que cada servicio necesita saber a que url hacer las peticiones
-API_URL = 'http://localhost:8001'
+API_URL = 'https://web-production-6ef9e.up.railway.app'
 
 def login(username, password):
     try:
