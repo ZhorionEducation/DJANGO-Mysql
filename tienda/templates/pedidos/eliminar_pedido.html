@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar un pedido</title>
+</head>
+<body>
+    <h1>Eliminar un pedido</h1>
+    <p>¿Estás seguro de que deseas eliminar el pedido de {{ pedido.cliente.nombre }}?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sí, eliminar</button>
+        <a href="{% url 'listar_pedidos' %}">No, volver a la lista de pedidos</a>
+    </form>
+    
+</body>
+</html>

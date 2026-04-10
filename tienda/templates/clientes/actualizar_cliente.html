@@ -1,0 +1,9 @@
+<!-- formulario de editar cliente -->
+
+<form method="post" id="formEditarCliente">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-save"></i> Guardar Cambios
+    </button>
+</form>

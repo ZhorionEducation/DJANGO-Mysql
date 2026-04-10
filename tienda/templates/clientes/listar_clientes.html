@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'listas/listasGlobales.css' %}">
+    <link rel="stylesheet" href="{% static 'listas/clientes/listaClientes.css' %}">
+    <link rel="stylesheet" href="{% static 'listas/modalGlobal.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <div class="container">
+        <h1 class="text-center">Lista de Clientes</h1>
+
+        <!-- nuevo cliente -->
+        <a class="btn btn-success mb-3" id="btnAddCliente"><i class="fa-solid fa-pen-to-square"></i> Nuevo Cliente</a>
+         <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Dirección</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cliente in page_obj %}
+                <tr>
+                    <td>{{ cliente.nombre }}</td>
+                    <td>{{ cliente.correo }}</td>
+                    <td>{{ cliente.telefono }}</td>
+                    <td>{{ cliente.direccion }}</td>
+                    <td>
+                        <!-- boton para editar cliente -->
+                        <a class="btn btn-primary" id="editarCliente" data-cliente-id="{{ cliente.id }}"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <!-- boton para eliminar cliente -->
+                        <a class="btn btn-danger" id="eliminarCliente" data-no-loader data-cliente-id="{{ cliente.id }}" ><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No hay clientes registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+         </table>
+         <div class="pagination">
+                <div>
+                    {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary btnPasar btn-success">Anterior</a>
+                    {% endif %}
+                </div>
+
+                <div class="numberPageContainer">
+                    <span class="current-page">
+                        Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                </div>
+
+                <div>
+                    {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary btnPasar btn-success">Siguiente</a>
+                    {% endif %}
+                </div>
+         </div>
+    </div>
+
+    <!-- modal crear cliente -->
+    <div id="modalCliente" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo Cliente</h5>
+                <button type="button" class="btn-close" id="btnCloseModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- aca ira el formulario del cliente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- modal editar cliente -->
+    <div id="modalEditarCliente" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Cliente</h5>
+                <button type="button" class="btn-close" id="btnCloseModalEditar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body-editar">
+                <!-- aca ira el formulario del cliente -->
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'js/modalCrearCliente.js' %}"></script>
+    <script src="{% static 'js/modalEditarCliente.js' %}"></script>
+    <script src="{% static 'js/sweetAlertClientes.js' %}"></script>
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,6 @@
+<!-- formulario de editar pedido -->
+ <form method="post" id="formEditarPedido">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btnbtn-primary">Guardar</button>
+</form>

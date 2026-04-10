@@ -1,0 +1,398 @@
+@import url('./listasGlobales.css');
+
+/* Overlay de fondo */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    animation: fadeIn 0.3s ease-in-out;
+    backdrop-filter: blur(4px);
+}
+
+.modal-overlay.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Contenedor del modal */
+.modal-container {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-hover);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Encabezado del modal */
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    padding: 28px 32px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+}
+
+.modal-title {
+    color: white;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.8px;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    transition: var(--transition);
+    opacity: 0.85;
+    border-radius: 8px;
+}
+
+.btn-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* Cuerpo del modal */
+.modal-body {
+    padding: 36px;
+    background: linear-gradient(135deg, #f8fafc 0%, #e8f5e9 100%);
+}
+
+/* Formulario dentro del modal */
+.modal-body form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.modal-body h1,
+.modal-body h2,
+.modal-body h3 {
+    color: var(--text-dark);
+    font-weight: 800;
+    margin-bottom: 16px;
+    display: none;
+}
+
+/* Párrafos del formulario Django */
+.modal-body p {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+}
+
+/* Grupos de formulario */
+.modal-body .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-body label,
+.modal-body .modal-body p label {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: block;
+}
+
+/* Inputs, textareas, selects */
+.modal-body input,
+.modal-body textarea,
+.modal-body select,
+.modal-body .modal-body p input,
+.modal-body .modal-body p textarea,
+.modal-body .modal-body p select {
+    padding: 13px 18px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: var(--transition);
+    background: white;
+    color: var(--text-dark);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modal-body input::placeholder,
+.modal-body textarea::placeholder {
+    color: #94a3b8;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    background: white;
+}
+
+.modal-body input[type="text"]:focus,
+.modal-body input[type="email"]:focus,
+.modal-body input[type="number"]:focus,
+.modal-body input[type="tel"]:focus {
+    border-color: var(--success-color);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+.modal-body textarea {
+    resize: vertical;
+    min-height: 110px;
+    font-family: inherit;
+}
+
+/* Botones dentro del modal */
+.modal-body button,
+.modal-body input[type="submit"],
+.modal-body .btn,
+.modal-footer .btn {
+    padding: 12px 32px;
+    border-radius: 10px;
+    font-weight: 700;
+    border: none;
+    transition: var(--transition);
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    width: 100%;
+}
+
+/* Botón de envío */
+.modal-body button[type="submit"],
+.modal-body input[type="submit"] {
+    background: linear-gradient(135deg, var(--success-color) 0%, var(--success-dark) 100%);
+    color: white;
+    box-shadow: 0 8px 16px rgba(16, 185, 129, 0.25);
+    margin-top: 12px;
+}
+
+.modal-body button[type="submit"]:hover,
+.modal-body input[type="submit"]:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(16, 185, 129, 0.4);
+    color: white;
+}
+
+.modal-body button[type="submit"]:active,
+.modal-body input[type="submit"]:active {
+    transform: translateY(-1px);
+}
+
+.modal-body .btn-primary,
+.modal-footer .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+}
+
+.modal-body .btn-primary:hover,
+.modal-footer .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.4);
+    color: white;
+}
+
+.modal-body .btn-secondary,
+.modal-footer .btn-secondary {
+    background: var(--secondary-color);
+    color: white;
+    box-shadow: 0 8px 16px rgba(100, 116, 139, 0.25);
+}
+
+.modal-body .btn-secondary:hover,
+.modal-footer .btn-secondary:hover {
+    background: #52627a;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(100, 116, 139, 0.4);
+}
+
+/* Pie del modal */
+.modal-footer {
+    background: white;
+    border-top: 2px solid var(--border-color);
+    padding: 24px 32px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+/* Mensajes de error e información */
+.modal-body .errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 4px solid var(--danger-color);
+    margin-bottom: 12px;
+}
+
+.modal-body .errorlist li {
+    color: #991b1b;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 4px 0;
+}
+
+.modal-body .helptext {
+    color: #64748b;
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.modal-body .invalid-feedback {
+    color: var(--danger-color);
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+    display: block;
+}
+
+.modal-body .form-control.is-invalid {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+/* Animación de carga */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.modal-body.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-container {
+        width: 95%;
+        max-height: 85vh;
+    }
+
+    .modal-header {
+        padding: 20px 24px;
+    }
+
+    .modal-title {
+        font-size: 20px;
+    }
+
+    .modal-body {
+        padding: 28px;
+    }
+
+    .modal-body button,
+    .modal-body input[type="submit"],
+    .modal-body .btn,
+    .modal-footer .btn {
+        width: 100%;
+        padding: 11px 20px;
+    }
+
+    .modal-footer {
+        padding: 18px 24px;
+        flex-direction: column;
+    }
+
+    .modal-footer .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-container {
+        width: 100%;
+        max-height: 80vh;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .modal-header {
+        padding: 16px 18px;
+    }
+
+    .modal-title {
+        font-size: 18px;
+    }
+
+    .modal-body {
+        padding: 18px;
+    }
+
+    .modal-body form {
+        gap: 16px;
+    }
+
+    .modal-footer {
+        padding: 12px 18px;
+    }
+
+    .modal-body input,
+    .modal-body textarea,
+    .modal-body select,
+    .modal-body button,
+    .modal-body input[type="submit"] {
+        font-size: 16px;
+    }
+}

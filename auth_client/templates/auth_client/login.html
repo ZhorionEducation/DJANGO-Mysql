@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Tienda</title>
+    {% block navbarCss %}{% endblock %}
+    {% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+    {% endblock %}
+</head>
+<body>
+    {% block navbar %}{% endblock %}
+
+    {% block content %}
+        <div class="login-container">
+            <form method="post">
+                {% csrf_token %}
+                <h1>Iniciar Sesión</h1>
+                
+                <div class="form-group">
+                    <label for="username">Usuario:</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" id="username" name="username" placeholder="Ingrese su usuario" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required>
+                    </div>
+                </div>
+                
+                {% if error %}
+                <div class="error-message">
+                    <p>{{ error }}</p>
+                </div>
+                {% endif %}
+                
+                <button type="submit">Ingresar</button>
+            </form>
+        </div>
+    {% endblock %}
+</body>
+</html>

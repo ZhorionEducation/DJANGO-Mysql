@@ -1,0 +1,8 @@
+<!-- Formulario de crear cliente -->
+<form method="post" id="formCrearCliente">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-save"></i> Guardar Cliente
+    </button>
+</form>

@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'listas/listasGlobales.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/dashboard.css' %}">
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1><i class="fa-solid fa-chart-line"></i> Dashboard</h1>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card success">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="stat-label">Total Clientes</div>
+                <p class="stat-value">{{ total_clientes }}</p>
+            </div>
+
+            <div class="stat-card info">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <div class="stat-label">Total Pedidos</div>
+                <p class="stat-value">{{ total_pedidos }}</p>
+            </div>
+
+            <div class="stat-card warning">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                </div>
+                <div class="stat-label">Total Ventas (Entregados)</div>
+                <p class="stat-value">${{ total_ventas }} COP</p>
+            </div>
+            <div class="stat-card info">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-crown"></i>
+                </div>
+                <div class="stat-label">Producto Más Vendido</div>
+                <p class="stat-value">{{ producto_mas_vendido.producto__nombre }} ({{ producto_mas_vendido.total_vendido }} vendidos)</p>
+            </div>
+            <div class="stat-card danger">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-thumbs-down"></i>
+                </div>
+                <div class="stat-label">Producto Menos Vendido</div>
+                <p class="stat-value">{{ producto_menos_vendido.producto__nombre }} ({{ producto_menos_vendido.total_vendido }} vendidos)</p>
+            </div>
+        </div>
+
+        <!-- Charts Container -->
+        <div class="charts-container">
+            <!-- Bar Chart - Estados -->
+            <div class="chart-section">
+                <h3 class="chart-title">
+                    <i class="fa-solid fa-chart-bar"></i> Ventas por mes
+                </h3>
+                {% if ventas_por_mes %}
+                    <div>
+                        {% for venta in ventas_por_mes %}
+                            <div class="bar-item">
+                                <div class="bar-label">
+                                    <span>{{ venta.mes}}</span>
+                                    <span class="bar-count">${{ venta.total_ventas }}</span>
+                                </div>
+                                <div class="bar-track">
+                                    <div class="bar-fill bar-fill-entregado" data-count="{{ venta.total_ventas }}"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox"></i>
+                        <p>No hay datos de ventas por mes</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Circular Chart - Donut -->
+            <div class="chart-section">
+                <h3 class="chart-title">
+                    <i class="fa-solid fa-chart-pie"></i> Distribución de Pedidos
+                </h3>
+                {% if pedidos_por_estado %}
+                    <div class="circular-chart-container">
+                        <div class="donut-wrapper">
+                            <div class="donut-chart">
+                                <div class="donut-inner">
+                                    <p class="donut-center-value">{{ total_pedidos }}</p>
+                                    <p class="donut-center-label">Pedidos</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-legend">
+                            {% for estado in pedidos_por_estado %}
+                                <div class="legend-item">
+                                    {% if estado.estado == 'Pendiente' %}
+                                        <div class="legend-color legend-pendiente"></div>
+                                    {% elif estado.estado == 'Enviado' %}
+                                        <div class="legend-color legend-enviado"></div>
+                                    {% elif estado.estado == 'Entregado' %}
+                                        <div class="legend-color legend-entregado"></div>
+                                    {% elif estado.estado == 'Cancelado' %}
+                                        <div class="legend-color legend-cancelado"></div>
+                                    {% endif %}
+                                    <span>{{ estado.estado }} ({{ estado.count }})</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fa-solid fa-inbox"></i>
+                        <p>No hay datos de distribución</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Top Clientes -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>
+                    <i class="fa-solid fa-crown"></i> Top 3 Clientes con más Pedidos (No cuenta Cancelados)
+                </h2>
+            </div>
+            <div>
+                {% for cliente in top_clientes %}
+                <div class="cliente-item">
+                    <div class="cliente-info">
+                        <div class="cliente-nombre">{{ cliente.nombre }}</div>
+                        <div class="cliente-pedidos">Cliente VIP</div>
+                    </div>
+                    <div class="cliente-badge">{{ cliente.num_pedidos }} pedidos</div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <i class="fa-solid fa-inbox"></i>
+                    <p>No hay clientes registrados aún</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block extra_js %}
+    {% endblock %}
+    
+</body>
+</html>

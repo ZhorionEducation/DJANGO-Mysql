@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear pedido</title>
+    {% load static %}
+</head>
+<body>
+    <form method="post" id="formulario-pedido">
+        {% csrf_token %}
+        
+        <!-- Mostrar errores generales del formulario -->
+        {% if form.non_field_errors %}
+            <div class="error-general">
+                {% for error in form.non_field_errors %}
+                    <span class="error">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <!-- Formulario de Pedido manual -->
+        <div class="form-group">
+            <label for="cliente-select">Cliente:</label>
+            {{ form.cliente }}
+            {% if form.cliente.errors %}
+                <span class="error">{{ form.cliente.errors }}</span>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="estado-select">Estado:</label>
+            {{ form.estado }}
+            {% if form.estado.errors %}
+                <span class="error">{{ form.estado.errors }}</span>
+            {% endif %}
+        </div>
+
+        <!-- Formset de Detalles de Pedido -->
+        {{ formset.management_form }}
+        
+        <h3>Detalles del Pedido</h3>
+        <div id="detalles-pedido-container">
+            {% for detalle_form in formset %}
+                <div class="detalle-pedido">
+                    <label>Producto:</label>
+                    <select id="producto-{{ forloop.counter0 }}" name="detallepedido_set-{{ forloop.counter0 }}-producto">
+                        <option value="">--- Selecciona un producto ---</option>
+                        {% for value, label in detalle_form.producto.field.choices %}
+                            {% if value %}
+                                <option value="{{ value }}">{{ label }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+
+                    <label>Cantidad:</label>
+                    <input type="number" id="cantidad-{{ forloop.counter0 }}" name="detallepedido_set-{{ forloop.counter0 }}-cantidad">
+
+                    
+                    <label>Precio:</label>
+                    <input type="text" id="precio-{{ forloop.counter0 }}" name="detallepedido_set-{{ forloop.counter0 }}-precio_pedido" disabled>
+                    
+                    {% if detalle_form.non_field_errors %}
+                    <span class="error">{{ detalle_form.non_field_errors }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="Agregar-ProductoContainer">
+            <!-- Boton de agregar nuevo producto (fuera del loop) -->
+            <button type="button" class="btn-agregar-detalle">Agregar Producto</button>
+        </div>
+        
+        <!-- Campo de precio total -->
+        <div class="form-group">
+            <label for="precio-total">Precio Total del Pedido:</label>
+            <input type="text" id="precio-total" value="0.00" disabled>
+        </div>
+
+        <button type="submit" id="btn-crear-pedido">Crear pedido</button>
+    </form>
+
+    <script src="{% static 'js/calcularPrecio.js' %}"> </script>
+    
+</body>
+</html>

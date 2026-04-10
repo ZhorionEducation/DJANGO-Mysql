@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Pedido</title>
+    <link rel="stylesheet" href="{% static 'listas/listasGlobales.css' %}">
+    <link rel="stylesheet" href="{% static 'listas/pedidos/listaPedidos.css' %}">
+    <link rel="stylesheet" href="{% static 'listas/modalGlobal.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Detalle del Pedido #{{ pedido.id }}</h1>
+
+        <!-- Información del pedido -->
+        <div class="pedido-info">
+            <div class="info-card">
+                <h3>Información del Pedido</h3>
+                <p><strong>Cliente:</strong> {{ pedido.cliente.nombre }}</p>
+                <p><strong>Fecha:</strong> {{ pedido.fecha }}</p>
+                <p><strong>Estado:</strong> 
+                    {% if pedido.estado == 'Pendiente' %}
+                        <span class="badge bg-warning">Pendiente</span>
+                    {% elif pedido.estado == 'Enviado' %}
+                        <span class="badge bg-success">Enviado</span>
+                    {% elif pedido.estado == 'Entregado' %}
+                        <span class="badge bg-success">Entregado</span>
+                    {% elif pedido.estado == 'Cancelado' %}
+                        <span class="badge bg-danger">Cancelado</span>
+                    {% else %}
+                        <span class="badge bg-info">Desconocido</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Detalles de productos -->
+        <h2 class="section-title">Productos del Pedido</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in detalles_pedido %}
+                <tr>
+                    <td>{{ detalle.producto.nombre }}</td>
+                    <td>{{ detalle.cantidad }}</td>
+                    <td>${{ detalle.precio_unitario }}</td>
+                    <td id="subtotales">${{ detalle.precio_pedido}}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No hay detalles para este pedido.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- total del pedido -->
+        <span class="total-pedido">Total del Pedido: <p id="totalPedido"></p></span>
+        <!-- boton de pdf para imprimir factura -->
+        <a href="{% url 'tienda:factura_pedidos' %}?pedido_id={{ pedido.id }}" class="btn btn-primary" data-no-loader><i class="fa-solid fa-file-pdf"></i> Imprimir Factura</a>
+    </div>
+</body>
+</html>
+

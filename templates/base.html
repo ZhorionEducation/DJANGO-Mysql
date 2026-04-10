@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda</title>
+
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'loader.css' %}">
+    {% block navbarCss %}
+    <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    {% endblock %}
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- LOADER GLOBAL -->
+    <div id="loader" class="loader">
+        <div class="spinner"></div>
+    </div>
+
+    {% block navbar %}
+    <!-- HAMBURGER BUTTON -->
+    <button class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- NAV VERTICAL GLOBAL -->
+    <div class="nav-vertical" id="navVertical">
+        <div class="nav-item profileSesion">
+            <i class="fa-solid fa-user"></i>
+            <span id="saludo">
+                Bienvenido! 
+            </span>
+            <span id="usuario">
+                {{ request.session.username }}
+            </span>
+        </div>
+        <div class="nav-item">
+            <a href="{% url 'tienda:dashboard' %}"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+        </div>
+        <div class="nav-item">
+            <a href="{% url 'tienda:listar_clientes' %}"><i class="fa-solid fa-users"></i> <span>Clientes</span></a>
+        </div>
+        <div class="nav-item">
+            <a href="{% url 'tienda:listar_pedidos' %}"><i class="fa-solid fa-box"></i> <span>Pedidos</span></a>
+        </div>
+        <div class="nav-item">
+            <a href="{% url 'tienda:listar_productos' %}"><i class="fa-solid fa-tags"></i> <span>Productos</span></a>
+        </div>
+        <div class="nav-item logout">
+            <a href="{% url 'auth_client:logout' %}"><i class="fa-solid fa-right-from-bracket"></i> <span>Cerrar Sesión</span></a>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+    
+    {% block extra_js %}{% endblock %}
+    <script src="{% static 'loader.js' %}"></script>
+    <script src="{% static 'navbar.js' %}"> </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pedidos</title>
+    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'listas/listasGlobales.css' %}">
+    <link rel="stylesheet" href="{% static 'listas/pedidos/listaPedidos.css' %}">
+    <link rel="stylesheet" href="{% static 'listas/modalGlobal.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    <div class="container">
+        <h1 class="text-center">Lista de Pedidos</h1>
+
+        <!-- nuevo pedido -->
+        <a class="btn btn-success mb-3" id="btnAddPedido"><i class="fa-solid fa-plus"></i> Nuevo Pedido</a>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID Pedido</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in page_obj %}
+                <tr>
+                    <td>#{{ pedido.id }}</td>
+                    <td>{{ pedido.cliente.nombre }}</td>
+                    <td>
+                        {{ pedido.fecha|date:"d M Y H:i" }}
+                    </td>
+                    <td>
+                        {% if pedido.estado == 'Pendiente' %}
+                            <span class="badge bg-warning">Pendiente</span>
+                        {% elif pedido.estado == 'Enviado' %}
+                            <span class="badge bg-success">Enviado</span>
+                        {% elif pedido.estado == 'Entregado' %}
+                            <span class="badge bg-success">Entregado</span>
+                        {% elif pedido.estado == 'Cancelado' %}
+                            <span class="badge bg-danger">Cancelado</span>
+                        {% else %}
+                            <span class="badge bg-info">Desconocido</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <!-- boton para editar pedido -->
+                        <a class="btn btn-primary" data-pedido-id="{{ pedido.id }}" id="btn-editar-pedido"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                        <!-- boton para ver detalle del pedido -->
+                        <a class="btn btn-primary btn-ver-detalle" data-pedido-id="{{ pedido.id }}" id="editarPedido"><i class="fa-solid fa-eye"></i></a>
+
+                        <!-- boton para exportar a excel -->
+                        <a href="{% url 'tienda:reporte_pedidos_excel' %}?pedido_id={{ pedido.id }}" class="btn btn-primary" data-no-loader><i class="fa-solid fa-file-excel"></i></a>
+
+                        <!-- boton para eliminar -->
+                        <!-- <a class="btn btn-primary" id="btnEliminarPedido" data-no-loader data-pedido-id="{{ pedido.id }}"><i class="fa-solid fa-trash"></i></a> -->
+
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No hay pedidos registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <div>
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-secondary btnPasar btn-primary">Anterior</a>
+                {% endif %}
+            </div>
+
+            <div class="numberPageContainer">
+                <span class="current-page">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                </span>
+            </div>
+
+            <div>
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="btn btn-secondary btnPasar btn-primary">Siguiente</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detalle pedido -->
+    <div id="modalDetallePedido" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalle del Pedido</h5>
+                <button type="button" class="btn-close" id="btnCloseModalDetalle">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Los detalles se cargan aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- modal crear pedido -->
+    <div id="modalCrearPedido" class="modal-overlay">
+        <div class="modal-container modal-crear-pedido">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Pedido</h5>
+                <button type="button" class="btn-close" id="btnCloseModalCrearPedido">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyPedido">
+                <!-- El formulario de creación se carga aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- modal editar pedido -->
+    <div id="modalEditarPedido" class="modal-overlay">
+        <div class="modal-container modal-crear-pedido">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Pedido</h5>
+                <button type="button" class="btn-close" id="btnCloseModalEditarPedido">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body-editar-pedido">
+                <!-- El formulario de edición se carga aquí -->
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'js/modalDetallePedido.js' %}"></script>
+    <script src="{% static 'js/modalCrearPedido.js' %}"></script>
+    <script src="{% static 'js/modalEditarPedido.js' %}"></script>
+    <script src="{% static 'js/calcularPrecio.js' %}"> </script>
+    <script src="{% static 'js/sweetAlertPedidos.js' %}"></script>
+    {% endblock %}
+</body>
+</html>
