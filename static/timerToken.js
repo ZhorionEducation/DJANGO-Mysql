@@ -1,4 +1,4 @@
-const containerTimerTokenHTML = document.querySelectorAll('#timerToken');
+const containerTimerTokenHTML = document.querySelector('#timerToken');
 
 const fetchTokenExpiration = () => {
     fetch('https://web-production-6ef9e.up.railway.app/token-expiry', {
@@ -14,10 +14,17 @@ const fetchTokenExpiration = () => {
         const now = new Date();
         const timeLeft = Math.max(0, expirationTime - now);
         updateTimer(timeLeft);
+        
+        // Actualizar cada segundo
+        setInterval(() => {
+            const now = new Date();
+            const timeLeft = Math.max(0, expirationTime - now);
+            updateTimer(timeLeft);
+        }, 1000);
     })
     .catch(error => {
         console.error('Error fetching token expiration:', error);
-        containerTimerTokenHTML.forEach(span => span.textContent = 'Error');
+        containerTimerTokenHTML.textContent = 'Error';
     });
 };
 
@@ -25,5 +32,8 @@ const updateTimer = (timeLeft) => {
     const minutes = Math.floor(timeLeft / 60000);
     const seconds = Math.floor((timeLeft % 60000) / 1000);
     const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    containerTimerTokenHTML.forEach(span => span.textContent = formattedTime);
+    containerTimerTokenHTML.textContent = formattedTime;
 };
+
+// Ejecutar cuando carga la página
+document.addEventListener('DOMContentLoaded', fetchTokenExpiration);
